@@ -43,7 +43,7 @@ class FinetunerV1Client(_BaseClient):
         :param description: Optional description of the experiment.
         :return: Created experiment.
         """
-        url = self._construct_url(self._base_url, API_VERSION, EXPERIMENTS) + '/'
+        url = f'{self._construct_url(self._base_url, API_VERSION, EXPERIMENTS)}/'
         return self._handle_request(
             url=url, method=POST, json_data={NAME: name, DESCRIPTION: description}
         )
@@ -70,7 +70,7 @@ class FinetunerV1Client(_BaseClient):
         ..note:: The maximum number for `size` per page is 100.
         """
         params = {'page': page, 'size': size}
-        url = self._construct_url(self._base_url, API_VERSION, EXPERIMENTS) + '/'
+        url = f'{self._construct_url(self._base_url, API_VERSION, EXPERIMENTS)}/'
         return self._handle_request(url=url, method=GET, params=params)
 
     def delete_experiment(self, name: str) -> Dict[str, Any]:
@@ -87,7 +87,7 @@ class FinetunerV1Client(_BaseClient):
 
         :return: Experiments to be deleted.
         """
-        url = self._construct_url(self._base_url, API_VERSION, EXPERIMENTS) + '/'
+        url = f'{self._construct_url(self._base_url, API_VERSION, EXPERIMENTS)}/'
         return self._handle_request(url=url, method=DELETE)
 
     """ Run API """

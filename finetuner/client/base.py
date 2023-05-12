@@ -31,11 +31,7 @@ class _BaseClient:
 
     def _get_hubble_user_id(self):
         user_info = self.hubble_client.get_user_info()
-        if user_info['code'] >= 400:
-            # will implement error-handling later
-            pass
-        hubble_user_id = user_info[DATA][HUBBLE_USER_ID]
-        return hubble_user_id
+        return user_info[DATA][HUBBLE_USER_ID]
 
     @staticmethod
     def _get_client_session() -> _HeaderPreservingSession:
@@ -81,7 +77,6 @@ class _BaseClient:
             )
         if stream:
             return response
-        else:
-            if TEXT in response.headers['content-type']:
-                return response.text
-            return response.json()
+        if TEXT in response.headers['content-type']:
+            return response.text
+        return response.json()

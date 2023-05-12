@@ -141,8 +141,6 @@ def test_load_finetune_data_from_csv_multimodal(dialect, contents, expect_error)
     if expect_error:
         with pytest.raises(expect_error):
             docs = csv_context.build_dataset(data=StringIO(content_stream))
-            for _ in docs:
-                pass
     else:
         docs = csv_context.build_dataset(data=StringIO(content_stream))
 

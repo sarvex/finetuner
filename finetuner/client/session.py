@@ -15,9 +15,9 @@ class _HeaderPreservingSession(Session):
         self._trusted_domains
         """
         headers = prepared_request.headers
-        url = prepared_request.url
         if 'Authorization' in headers:
             _original_parsed = urlparse(response.request.url)
+            url = prepared_request.url
             _redirect_parsed = urlparse(url)
             _original_domain = '.'.join(_original_parsed.hostname.split('.')[-2:])
             _redirect_domain = '.'.join(_redirect_parsed.hostname.split('.')[-2:])

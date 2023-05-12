@@ -46,7 +46,7 @@ def push_data(
             return name
         return data
 
-    _ids2names = dict()
+    _ids2names = {}
     return (
         _push_docarray(
             train_data, f'{DA_PREFIX}-{experiment_name}-{run_name}-train', _ids2names

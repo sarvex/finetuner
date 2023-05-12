@@ -19,9 +19,11 @@ def get_row(model_stub) -> Tuple[str, ...]:
 
 
 def list_model_classes() -> Dict[str, ModelStubType]:
-    rv = {}
     members = inspect.getmembers(model, inspect.isclass)
-    for name, stub in members:
-        if name != 'MLPStub' and not name.startswith('_') and type(stub) != type:
-            rv[name] = stub
-    return rv
+    return {
+        name: stub
+        for name, stub in members
+        if name != 'MLPStub'
+        and not name.startswith('_')
+        and type(stub) != type
+    }

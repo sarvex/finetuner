@@ -165,16 +165,14 @@ class QueryDocumentRelationsParser(_CSVParser):
                     doc2.tags[DEFAULT_TAG_KEY] = queries[col1]
                     artificial_label += 1
 
+                doc1.modality = modality_col1
                 if modality_col1 == modality_col2:
-                    doc1.modality = modality_col1
                     doc2.modality = modality_col1
                     if DEFAULT_TAG_KEY in doc1.tags:
                         yield doc1
                     if DEFAULT_TAG_KEY in doc2.tags:
                         yield doc2
                 else:
-                    # different modalities, for CLIP
-                    doc1.modality = modality_col1
                     doc2.modality = modality_col2
                     yield Document(
                         chunks=[doc1, doc2], tags={DEFAULT_TAG_KEY: queries[col1]}
@@ -250,26 +248,23 @@ class CSVContext:
     def _get_csv_parser(self, data: Union[str, TextIO]):
         if self._options.is_labeled:
             return LabeledCSVParser(file=data, task=self._task, options=self._options)
-        else:
-            _, num_columns = get_csv_file_dialect_columns(
-                file=data, encoding=self._options.encoding
+        _, num_columns = get_csv_file_dialect_columns(
+            file=data, encoding=self._options.encoding
+        )
+        if num_columns == 2:
+            return QueryDocumentRelationsParser(
+                file=data, task=self._task, options=self._options
             )
-            if num_columns == 2:
-                return QueryDocumentRelationsParser(
-                    file=data, task=self._task, options=self._options
-                )
-            elif num_columns == 3:
-                return PairwiseScoreParser(
-                    file=data, task=self._task, options=self._options
-                )
-            else:
-                raise TypeError('Can not determine the context of the csv.')
+        elif num_columns == 3:
+            return PairwiseScoreParser(
+                file=data, task=self._task, options=self._options
+            )
+        else:
+            raise TypeError('Can not determine the context of the csv.')
 
     def build_dataset(self, data: Union[str, TextIO, StringIO, DocumentArray]):
-        if (
-            isinstance(data, TextIO)
-            or isinstance(data, StringIO)
-            or (isinstance(data, str) and isfile(data))
+        if isinstance(data, (TextIO, StringIO)) or (
+            isinstance(data, str) and isfile(data)
         ):
             parser = self._get_csv_parser(data=data)
             da_generator = parser.parse()
@@ -309,10 +304,7 @@ def build_encoding_dataset(model: 'InferenceEngine', data: List[str]) -> Documen
     """
     modalities = model._metadata['preprocess_types']
     if model._select_model:
-        if model._select_model == 'clip-text':
-            task = 'text'
-        else:
-            task = 'image'
+        task = 'text' if model._select_model == 'clip-text' else 'image'
     elif list(modalities)[0] == ['features']:
         raise ValueError('MLP model does not support values from a list.')
     else:

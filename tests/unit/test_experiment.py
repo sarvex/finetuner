@@ -48,14 +48,13 @@ from finetuner.experiment import Experiment
 
 @pytest.fixture
 def experiment(finetuner_mocker):
-    experiment = Experiment(
+    return Experiment(
         client=finetuner_mocker._client,
         name='experiment name',
         status='ACTIVE',
         created_at='some time',
         description='test description',
     )
-    return experiment
 
 
 def test_get_experiment_name(experiment):

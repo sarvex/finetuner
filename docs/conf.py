@@ -180,7 +180,7 @@ ogp_image = 'https://finetuner.jina.ai/_static/banner.png'
 ogp_use_first_image = True
 ogp_description_length = 300
 ogp_type = 'website'
-ogp_site_name = f'Finetuner Documentation'
+ogp_site_name = 'Finetuner Documentation'
 
 ogp_custom_meta_tags = [
     '<meta name="twitter:card" content="summary_large_image">',
@@ -207,7 +207,7 @@ ogp_custom_meta_tags = [
 def add_server_address(app):
     # This makes variable `server_address` available to docbot.js
     server_address = app.config['server_address']
-    js_text = "var server_address = '%s';" % server_address
+    js_text = f"var server_address = '{server_address}';"
     app.add_js_file(None, body=js_text)
 
 

@@ -57,17 +57,19 @@ def list_callbacks() -> Dict[str, callback.CallbackStubType]:
 
 
 def _build_name_stub_map() -> Dict[str, model_stub.ModelStubType]:
-    rv = {}
     members = inspect.getmembers(model_stub, inspect.isclass)
-    for name, stub in members:
-        if name != 'MLPStub' and not name.startswith('_') and type(stub) != type:
-            rv[stub.name] = stub
-    return rv
+    return {
+        stub.name: stub
+        for name, stub in members
+        if name != 'MLPStub'
+        and not name.startswith('_')
+        and type(stub) != type
+    }
 
 
 def list_models() -> List[str]:
     """List available models."""
-    return [name for name in list_model_classes()]
+    return list(list_model_classes())
 
 
 def list_model_options() -> Dict[str, List[Dict[str, Any]]]:
@@ -502,8 +504,8 @@ def get_model(
             'calling `pip install onnxruntime-gpu` to speed up inference.',
             category=RuntimeWarning,
         )
-    if is_onnx:
-        inference_engine = ONNXRuntimeInferenceEngine(
+    return (
+        ONNXRuntimeInferenceEngine(
             artifact=artifact,
             token=token,
             batch_size=batch_size,
@@ -511,8 +513,8 @@ def get_model(
             device=device,
             logging_level=logging_level,
         )
-    else:
-        inference_engine = TorchInferenceEngine(
+        if is_onnx
+        else TorchInferenceEngine(
             artifact=artifact,
             token=token,
             batch_size=batch_size,
@@ -520,7 +522,7 @@ def get_model(
             device=device,
             logging_level=logging_level,
         )
-    return inference_engine
+    )
 
 
 def encode(
