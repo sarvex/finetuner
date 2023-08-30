@@ -11,7 +11,7 @@ sphinx-inline-tabs
 sphinx-autodoc-typehints==1.12.0
 sphinxext-opengraph
 sphinx-notfound-page==0.7.1
-sphinx-sitemap==2.2.0
+sphinx-sitemap==2.5.1
 sphinx_copybutton==0.4.0
 sphinx_markdown_tables==0.0.16
 sphinxcontrib-apidoc==0.3.0
