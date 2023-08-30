@@ -4,7 +4,7 @@ git+https://github.com/Holzhaus/sphinx-multiversion.git
 jupytext==1.14.1
 sphinx
 myst-parser==0.15.1
-nbsphinx==0.8.9
+nbsphinx==0.9.3
 sphinx-argparse==0.3.1
 sphinx-design
 sphinx-inline-tabs
